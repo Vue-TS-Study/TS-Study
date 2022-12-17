@@ -1,42 +1,22 @@
-const c: string = "hello";
-const d: number = 5;
-const e: boolean = true;
-const f: undefined = undefined;
-const g: null = null;
+//타입 추론 활용하기
+let str = ""; //이건 string으로 보나,
+const str2 = "hello"; //재 할당할 수 없는 const는 hello로 타입 추론. string으로 다시 써주면 오히려 타입의 범위를 늘려주는 행위.
 
-//고정된 값: 타입은 최대한 정확하게 잡기 위해
-const i: true = true;
-const num: 5 = 5;
-
-// 타입스크립트의 주 목적은 any를 없애는 것
-const h: any = true;
-
-//매개변수와 리턴 값
-function add(x: number, y: number): number {
-  return x + y;
-}
-
-//JS로 변환 가능해야 함으로, 타입 부분을 지워도 말이 되는 JS 코드여야 함.
-const minus: (x: number, y: number) => number = (x, y) => {
-  return x - y;
-};
-
-//type alias
-type Add = (x: number, y: number) => number;
-
-interface Minus {
-  (x: number, y: number): number;
-}
-const multiply: Add = (a, b) => {
-  return a * b;
-};
+//매개변수는 꼭 써줘야한다.
+// function func(x: number, y: number) {
+//   return x + y;
+// }
+//a의 타입은 any가 됨.
+// const val = func(3, 4);
 
 //객체
-const obj: { x: string; y: string } = { x: "hello", y: "hi" };
+const obj = { x: "hello", y: "hi" };
 
 //배열
-const arr: string[] = ["hi", "hello"];
-const arr2: Array<number> = [2, 3];
+//얘도 string|number
+const arr = ["hi", 3];
 
 //튜플: 개수 고정
 const tuple: [number, number, string] = [2, 2, "hi"];
+//string|number로 타입 추론을 함. 좁혀주기 위해서는 위 처럼 타입을 쓰는 게 현명
+const tuple2 = [2, 2, "hi"];
