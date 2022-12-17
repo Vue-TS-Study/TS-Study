@@ -118,3 +118,95 @@
 // type ab = A|B;
 // const c : C = {name:'sungkyun', age:22, married:false}; //inner 타입검사
 
+// 10. void의 두 가지 사용법
+// interface A {a:string}
+// const obj = {a:'hello', b:'world'};
+// const obj1 : A = obj; //잉여 속성 검사
+
+// function a(callback: () => void): void{ //매개변수가 void, 리턴값이 void
+
+// }
+
+// interface Human { //메소드 void
+//     talk: () => void;
+// }
+
+// const human : Human = {
+//     talk(){return 'abc';}
+// }
+//void이면 리턴을 넣으면 x
+//declare function forEach(arr: number[], callback: (el:number)=> undefined):void;
+// declare는 밑에 실세 구현코드를 만들 필요가 없다.
+// let target: number[] = [];
+// forEach([1, 2, 3], el => target.push(el));
+
+// 11. unknown 과 any(any는 타입검사가 x)
+
+// 12. 타입 가드
+// function numOrStr(a: number | string) {
+//     if (typeof a === 'string') { //unknown제외하고 as는 잘 안쓴다.
+//       a.split(',');  
+//     } else {
+//       a.toFixed(1);
+//     }
+//   }
+  
+//   function numOrNumArr(a: number | number[]) {
+//     if (Array.isArray(a)) {
+//       a.slice(1);  
+//     } else {
+//       a.toFixed(1);
+//     }
+//   }
+  
+//   type B = { type: 'b', bbb: string };
+//   type C = { type: 'c', ccc: string };
+//   type D = { type: 'd', ddd: string };
+//   type A = B | C | D;
+//   function typeCheck(a: A) {
+//     if (a.type === 'b') {
+//       a.bbb;
+//     } else if (a.type === 'c') {
+//       a.ccc;
+//     } else {
+//       a.ddd;
+//     }
+//   }
+  
+//   interface Cat { meow: number }
+//   interface Dog { bow: number }
+//   function catOrDog(a: Cat | Dog): a is Dog {
+//     if ((a as Cat).meow) { return false }
+//     return true;
+//   }
+//   const cat: Cat | Dog = { meow: 3 }
+//   if (catOrDog(cat)) {
+//       console.log(cat.meow);
+//   }
+//   if ('meow' in cat) {
+//       console.log(cat.meow);
+//   }
+  
+//   const isRejected = (input: PromiseSettledResult<unknown>): input is PromiseRejectedResult => input.status === 'rejected';
+//   const isFulfilled = <T>(input: PromiseSettledResult<T>): input is PromiseFulfilledResult<T> => input.status === 'fulfilled';
+  
+//   const promises = await Promise.allSettled([Promise.resolve('a'), Promise.resolve('b')]);
+//   const errors = promises.filter(isRejected);
+
+// 13. readonly, 인덱스드 시그니처, 맵드 타입스
+// type B = 'Human' | 'Mammal' | 'Animal';
+// type A = {[key in B]: string}; //인덱스드 시그니처: 타입이 모두 동일할 경우 동일한 타입만 받는다.
+// const aaaa: A = {Human :'hello', Mammal:'world', Animal:'mammal'};
+
+// 14. 클래스의 새로운 기능
+interface A {
+    readonly a: string;
+    b: string;
+  }
+  class B implements A {
+    private a: string;
+    protected b: string;
+  }
+class C extends B {}
+new C().a;
+new C().b;
