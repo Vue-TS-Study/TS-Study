@@ -20,3 +20,25 @@ const arr = ["hi", 3];
 const tuple: [number, number, string] = [2, 2, "hi"];
 //string|number로 타입 추론을 함. 좁혀주기 위해서는 위 처럼 타입을 쓰는 게 현명
 const tuple2 = [2, 2, "hi"];
+
+//사라지는 부분
+// function ts(x: number, y: number): number;
+// function ts(x, y) {
+//   return x + y;
+// }
+
+//as 도 사라짐
+let aa = 123;
+aa = "hello" as unknown as number;
+
+//그냥 하면 never 안 뜨긴 함.
+// const bb: never[] = [];
+// bb.push("");
+
+//ELEMENT와 같은 형식을 알려주면서 속성들 및 기능 정의, 오류 수정 도와줌
+//!는 뒤에 |null을 없애줌 -> 비추천함
+// const head = document.querySelector("head")!;
+const head = document.querySelector("head");
+if (head) {
+  head.innerHTML = "hello";
+}
