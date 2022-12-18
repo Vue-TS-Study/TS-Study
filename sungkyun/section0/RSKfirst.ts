@@ -199,14 +199,29 @@
 // const aaaa: A = {Human :'hello', Mammal:'world', Animal:'mammal'};
 
 // 14. 클래스의 새로운 기능
-interface A {
-    readonly a: string;
-    b: string;
-  }
-  class B implements A {
-    private a: string;
-    protected b: string;
-  }
-class C extends B {}
-new C().a;
-new C().b;
+// interface A {
+//     readonly a: string;
+//     b: string;
+//   }
+//   class B implements A {
+//     private a: string;
+//     protected b: string;
+//   }
+// class C extends B {}
+// new C().a;
+// new C().b;
+
+// 15. 옵셔널 제너릭 기본
+//function abc(a: number, b?: number, c?:number){} //?는 있어도 되고 없어도 된다
+// function abc(...args:number[]){}
+// abc(1)
+// abc(1, 2)
+// abc(1, 2, 3)
+
+// function add<T extends string | number>(x : T, y : T) : T{ //제너릭은 사용할 때 타입이 정해짐
+//     return x+y;
+// };
+// add(1, 2);
+// add('1', '2')
+
+
