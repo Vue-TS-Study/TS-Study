@@ -174,9 +174,162 @@ forEach([1, 2, 3], (el) => {
 });
 
 //unknown 과 any
+//unknown일 때 빼고는 as 쓰지말아야함.
 const any: any = voidFunc2.talk();
 //포기, 오류 없음 일반 JS와 같음
 any.method();
 
 const notNow: unknown = voidFunc2.talk();
 (notNow as Ivoid).talk();
+
+//타입 좁히기(타입가드)
+//타입 검사 및 배열 검사
+function dualType(x: string | number | number[]) {
+  if (typeof x === "number") {
+    x.toFixed(1);
+  }
+  if (typeof x === "string") {
+    x.charAt(3);
+  }
+  if (Array.isArray(x)) {
+    x.push(23);
+  }
+  // if(typeof x ==="boolean"){
+  //   x.toString()
+  // }
+}
+dualType(123);
+dualType("123");
+
+// TS에서 클래스 활용하기
+class A {
+  aaa() {}
+}
+class B {
+  bbb() {}
+}
+
+//클래스 구별 해내기
+function classParam(param: A | B) {
+  //왜 에러 안나지?
+  // param.aaa();
+  if (param instanceof B) {
+    param.bbb();
+  }
+}
+classParam(new A());
+classParam(new B());
+
+//안에 있는 속성 값및 키로 구별하기(객체)
+type BB = { type: "B"; say: "hi" };
+type CC = { type: "C"; show: "dance"; love: true };
+type DD = { type: "D"; sing: "la" };
+
+function typeCheck(param: BB | CC | DD) {
+  if (param.type === "B") {
+    param.say;
+  }
+  if ("show" in param) {
+    param.love;
+  }
+}
+//리턴 값에 is 가 있으면 커스텀 판별 함수
+function whatLetter(letter: BB | CC | DD): letter is BB {
+  if ((letter as BB).say) {
+    return true;
+  } else {
+    return false;
+  }
+}
+//true를 리턴할 경우, 매개변수는 지정해준 BB 를 가지게 된다.
+//return param is BB
+function letter(param: BB | CC | DD) {
+  if (whatLetter(param)) {
+    param.say;
+  } else {
+    //CC|DD의 타입을 갖는다
+    param.type;
+  }
+}
+
+const bb: BB = { type: "B", say: "hi" };
+//여기서의 타입은 boolean으로 나온다.
+const abc = whatLetter(bb);
+
+// //리턴 값에 is 가 있으면 커스텀 판별 함수
+// function whatLetter(letter){
+//   if (letter.say) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
+
+//promise settled
+//promise의 상태 변화 : pending->settled(resolved,rejected)
+//resolved의 경우 then 속성이 가능해지지만
+//rejected의 경우 catch()만 가능
+
+//새로운 타입
+//원래 객체 타입 :object but object 지양, interface, type, class
+//Object,{}-> null과 undefined를 제외한 모든 타입을 가리킴
+//unknown ={}|null|undefined
+const anonymous: unknown = "";
+if (anonymous) {
+  anonymous; //{}로 타입이 뜨게 됨
+} else {
+  anonymous; //unknown이 나오게 됨
+}
+
+//readonly 앞에 붙여주기만 하면
+//indexed signature
+//어떤 키나 값이든 모두 문자열이었으면
+type AA = { [key: string]: string };
+const aaaa: AA = { aaa: "" };
+
+//맵드 타입스
+type thing = "Human" | "Mammal" | "Animal";
+type whatThing = { [key in thing]: string };
+//다 들어가야 됨
+const Munseoyeun: whatThing = { Human: "d", Mammal: "", Animal: "" };
+
+//class다루기
+const instanceA: A = new A();
+const classA: typeof A = A;
+
+//implements로 구현하기 : 잘 활용되지는 않음
+interface classMom {
+  //추상
+  readonly a: string;
+  b: string;
+}
+class son implements classMom {
+  // 구현 interface 없이 쓰면 private, protected 다 쓸 수 있음
+  a: string = "";
+  //interface에서 지정해준 타입과 다른 타입 입력시 에러
+  // b = 123;
+  b: string = "";
+}
+
+//private, protected : 상속 받은 애들까지만 접근 가능, instance는 둘다 안됨
+//abstract도 쓸 수 있음 -> interface 처럼
+
+//옵셔널
+function abcd(...args: number[]) {} //전부 다 갖고 싶을 때 (개수 제한 없이)
+function abcde(a?: string) {} //개수 정해져있는데 몇개는 없어도 되면
+
+//제네릭
+//이미지
+//이 경우에는 어떻게 될까?
+//나중에 정할래 타입은 ~ 우선 변수처럼 !
+function genericAdd<T extends string | number, K extends string | number>(
+  x: T,
+  y: K
+): T | K {
+  return x + y;
+}
+const what = genericAdd(1, 2);
+const whattt = genericAdd("1", "2");
+
+// function add<T extends string>(x: T, y: T): T { return x + y }
+// add('1', '2')
